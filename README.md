@@ -1,5 +1,8 @@
 Android Tools
 =============
+
+[![Build Status](https://travis-ci.org/brunojensen/br.com.bea.androidtools.png?branch=master)](https://travis-ci.org/brunojensen/br.com.bea.androidtools)
+
 **Project designed to accelerate the development of android apps.**
 
 <p>
