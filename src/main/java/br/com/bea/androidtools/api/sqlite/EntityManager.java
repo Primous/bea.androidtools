@@ -29,6 +29,8 @@ public interface EntityManager {
 
     <E extends Entity<?>> void delete(E entity);
 
+    <E extends Entity<?>> boolean deleteAll(Class<E> targetEntity);
+
     <E extends Entity<?>> E find(E entity);
 
     <E extends Entity<?>> EntityManager init(Context context, String database, List<Class<E>> targetClasses);

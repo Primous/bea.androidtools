@@ -72,6 +72,17 @@ public class EntityManagerImpl implements EntityManager {
     }
 
     @Override
+    public <E extends Entity<?>> boolean deleteAll(final Class<E> targetEntity) {
+        try {
+            sqlite.getWritableDatabase().execSQL(String.format("DELETE FROM ", targetEntity.getAnnotation(Table.class)
+                                                     .name()));
+            return true;
+        } catch (final Exception e) {
+            throw new SQLiteException(e.getLocalizedMessage());
+        }
+    }
+
+    @Override
     public <E extends Entity<?>> E find(final E entity) {
         try {
             final Cursor cursor = QueryBuilder.select().from(entity.getClass()).where(Restriction.eq("id", entity
