@@ -48,8 +48,8 @@ public final class QueryBuilder {
     }
 
     Cursor build(final SQLiteDatabase sqlite) {
-        return sqlite.query(true, targetClass.getAnnotation(Table.class).name(), buildColumns(), buildSelection(),
-                            selectionValues(), buildGroupBy(), null, buildOrderBy(), buildLimit(), null);
+        return sqlite.query(targetClass.getAnnotation(Table.class).name(), buildColumns(), buildSelection(),
+                            selectionValues(), buildGroupBy(), null, buildOrderBy(), buildLimit());
     }
 
     @SuppressWarnings("unchecked")
@@ -127,9 +127,8 @@ public final class QueryBuilder {
     private String[] selectionValues() {
         if (selection.isEmpty()) return null;
         final List<String> values = new LinkedList<String>();
-        for (final Criteria criteria : selection) {
+        for (final Criteria criteria : selection)
             values.addAll(criteria.getValues());
-        }
         return values.toArray(new String[values.size()]);
     }
 

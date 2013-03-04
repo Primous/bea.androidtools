@@ -75,8 +75,9 @@ public class EntityManagerImpl implements EntityManager {
     @Override
     public <E extends Entity<?>> boolean deleteAll(final Class<E> targetEntity) {
         try {
-            sqlite.getWritableDatabase().delete(targetEntity.getAnnotation(Table.class).name(), null, null);
-            return true;
+            return sqlite.getWritableDatabase().delete(targetEntity.getAnnotation(Table.class).name(), null, null) > 1
+                                                                                                                      ? true
+                                                                                                                      : false;
         } catch (final Exception e) {
             throw new SQLiteException(e.getLocalizedMessage());
         }
@@ -85,19 +86,10 @@ public class EntityManagerImpl implements EntityManager {
     @Override
     public <E extends Entity<?>> E find(final E entity) {
         try {
-            final Cursor cursor = QueryBuilder.select().from(entity.getClass()).where(Restriction.eq("id", entity
-                                                                                          .getId()))
-                .build(EntityManagerImpl.sqlite.getReadableDatabase());
-            if (cursor.moveToFirst()) {
-                @SuppressWarnings("unchecked")
-                final E value = (E) entity.getClass().newInstance();
-                for (final Field field : EntityUtils.columnFields(entity.getClass())) {
-                    field.setAccessible(true);
-                    field.set(value, EntityUtils.convert(field, cursor));
-                }
-                return value;
-            }
-            return null;
+            final List<E> result = search(QueryBuilder.select().from(entity.getClass()).where(Restriction
+                                                                                                  .eq("id", entity
+                                                                                                      .getId())));
+            return !result.isEmpty() ? result.get(0) : null;
         } catch (final Exception e) {
             throw new SQLiteException(e.getLocalizedMessage());
         }
@@ -144,6 +136,7 @@ public class EntityManagerImpl implements EntityManager {
                 throw new SQLiteException(e.getLocalizedMessage());
             }
         while (cursor.moveToNext());
+        cursor.close();
         return result;
     }
 

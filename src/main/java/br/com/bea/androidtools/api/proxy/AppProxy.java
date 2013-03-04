@@ -75,9 +75,8 @@ public class AppProxy implements Proxy<JSONArray> {
             if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                 final BufferedReader reader = new BufferedReader(new InputStreamReader(input, "utf-8"), 8);
                 String line = null;
-                while ((line = reader.readLine()) != null) {
+                while ((line = reader.readLine()) != null)
                     sb.append(line);
-                }
             }
             return Arrays.asList(new JSONArray(sb.toString()));
         } catch (final Exception e) {
