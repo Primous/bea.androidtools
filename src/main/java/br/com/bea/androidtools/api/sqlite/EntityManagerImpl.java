@@ -20,6 +20,7 @@ IN THE SOFTWARE.
 package br.com.bea.androidtools.api.sqlite;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import android.content.ContentValues;
@@ -74,8 +75,7 @@ public class EntityManagerImpl implements EntityManager {
     @Override
     public <E extends Entity<?>> boolean deleteAll(final Class<E> targetEntity) {
         try {
-            sqlite.getWritableDatabase().execSQL(String.format("DELETE FROM ", targetEntity.getAnnotation(Table.class)
-                                                     .name()));
+            sqlite.getWritableDatabase().delete(targetEntity.getAnnotation(Table.class).name(), null, null);
             return true;
         } catch (final Exception e) {
             throw new SQLiteException(e.getLocalizedMessage());
@@ -103,11 +103,10 @@ public class EntityManagerImpl implements EntityManager {
         }
     }
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    public <E extends Entity<?>> EntityManager init(final Context context,
-                                                    final String database,
-                                                    final List<Class<E>> targetClasses) {
-        EntityManagerImpl.sqlite = new SQlite<E>(context, database, targetClasses);
+    public EntityManager init(final Context context, final String database, final Class<?>... targetClasses) {
+        EntityManagerImpl.sqlite = new SQlite(context, database, Arrays.asList(targetClasses));
         return this;
     }
 

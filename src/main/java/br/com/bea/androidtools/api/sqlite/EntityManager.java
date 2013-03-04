@@ -33,7 +33,7 @@ public interface EntityManager {
 
     <E extends Entity<?>> E find(E entity);
 
-    <E extends Entity<?>> EntityManager init(Context context, String database, List<Class<E>> targetClasses);
+    EntityManager init(Context context, String database, Class<?>... targetClasses);
 
     <E extends Entity<?>> E persist(E entity);
 

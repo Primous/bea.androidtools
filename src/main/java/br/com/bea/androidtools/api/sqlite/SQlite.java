@@ -33,16 +33,18 @@ import br.com.bea.androidtools.api.model.EntityUtils;
 
 class SQlite<E extends Entity<?>> extends SQLiteOpenHelper {
 
-    private final List<Class<E>> targetClasses;
+    private final List<Class<?>> targetClasses;
 
-    public SQlite(final Context context, final String database, final List<Class<E>> targetClasses) {
+    public SQlite(final Context context, final String database, final List<Class<?>> targetClasses) {
         super(context, database, null, 1);
         this.targetClasses = targetClasses;
     }
 
     @Override
     public void onCreate(final SQLiteDatabase db) {
-        for (final Class<E> targetClass : targetClasses) {
+        for (final Class<?> target : targetClasses) {
+            @SuppressWarnings("unchecked")
+            final Class<E> targetClass = (Class<E>) target;
             final StringBuilder builder = new StringBuilder();
             builder.append(" CREATE TABLE ").append(targetClass.getAnnotation(Table.class).name()).append("( ");
             for (final Iterator<Field> iterator = EntityUtils.columnFields(targetClass).iterator(); iterator.hasNext();) {
