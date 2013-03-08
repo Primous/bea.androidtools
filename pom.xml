@@ -3,8 +3,8 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>br.com.bea.androidtools</groupId>
-    <artifactId>br.com.bea.androidtools</artifactId>
+    <groupId>br.com.bea</groupId>
+    <artifactId>bea.androidtools</artifactId>
     <version>0.0.1</version>
     <name>B&amp;A Tecnologia and Collaborators - Android Tools</name>
     <properties>
