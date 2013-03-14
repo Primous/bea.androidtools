@@ -37,14 +37,17 @@ public abstract class AbstractListAdapter<E extends ValueObject> extends BaseAda
 
     public final void add(final E element) {
         this.list.add(element);
+        notifyDataSetChanged();
     }
 
     public final void addAll(final List<E> list) {
         this.list.addAll(list);
+        notifyDataSetChanged();
     }
 
     public final void clear() {
         list.clear();
+        notifyDataSetChanged();
     }
 
     @Override
