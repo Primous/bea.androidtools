@@ -20,6 +20,7 @@ IN THE SOFTWARE.
 package br.com.bea.androidtools.api.model;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -53,6 +54,9 @@ public final class EntityUtils {
             return cursor.getLong(cursor.getColumnIndex(field.getAnnotation(Column.class).name()));
         if (field.getType().equals(Integer.class))
             return cursor.getInt(cursor.getColumnIndex(field.getAnnotation(Column.class).name()));
+        if (field.getType().equals(BigDecimal.class))
+            return BigDecimal
+                .valueOf(cursor.getDouble(cursor.getColumnIndex(field.getAnnotation(Column.class).name())));
         if (field.getType().equals(Date.class))
             return DATE_FORMAT.parse(cursor.getString(cursor.getColumnIndex(field.getAnnotation(Column.class).name())));
         return cursor.getString(cursor.getColumnIndex(field.getAnnotation(Column.class).name()));
@@ -62,6 +66,8 @@ public final class EntityUtils {
         if (field.getType().equals(String.class)) return object.getString(field.getAnnotation(Metadata.class).value());
         if (field.getType().equals(Integer.class)) return object.getInt(field.getAnnotation(Metadata.class).value());
         if (field.getType().equals(Long.class)) return object.getLong(field.getAnnotation(Metadata.class).value());
+        if (field.getType().equals(BigDecimal.class))
+            return BigDecimal.valueOf(object.getDouble(field.getAnnotation(Metadata.class).value()));
         if (field.getType().equals(Date.class))
             return DATETIME_FORMAT.parse(object.getString(field.getAnnotation(Metadata.class).value()));
         return object.get(field.getAnnotation(Metadata.class).value());
