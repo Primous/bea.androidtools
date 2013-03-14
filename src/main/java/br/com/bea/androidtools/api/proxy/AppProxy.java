@@ -52,7 +52,10 @@ public class AppProxy implements Proxy<JSONArray> {
     @Override
     public Proxy<JSONArray> connect(final Properties properties) {
         try {
-            connection = (HttpURLConnection) new URL(properties.getProperty("url_connection")).openConnection();
+            if (properties.contains("url_connection") && properties.contains("method")) {
+                connection = (HttpURLConnection) new URL(properties.getProperty("url_connection")).openConnection();
+                connection.setRequestMethod(properties.getProperty("method"));
+            }
         } catch (final Exception e) {
             e.printStackTrace();
         }

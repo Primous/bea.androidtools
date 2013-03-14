@@ -35,32 +35,36 @@ public abstract class AbstractListAdapter<E extends ValueObject> extends BaseAda
         this.inflater = inflater;
     }
 
-    public void add(final E element) {
+    public final void add(final E element) {
         this.list.add(element);
     }
 
-    public void addAll(final List<E> list) {
+    public final void addAll(final List<E> list) {
         this.list.addAll(list);
     }
 
-    public void clear() {
+    public final void clear() {
         list.clear();
     }
 
     @Override
-    public int getCount() {
+    public final int getCount() {
         return list.size();
     }
 
     @Override
-    public E getItem(final int position) {
+    public final E getItem(final int position) {
         return list.get(position);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public long getItemId(final int position) {
+    public final long getItemId(final int position) {
         final E e = list.get(position);
         return e instanceof Entity ? ((Entity<Number>) e).getId().longValue() : position;
+    }
+
+    public final List<E> getList() {
+        return list;
     }
 }
