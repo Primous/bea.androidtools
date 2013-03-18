@@ -46,7 +46,7 @@ class SQlite<E extends Entity<?>> extends SQLiteOpenHelper {
             @SuppressWarnings("unchecked")
             final Class<E> targetClass = (Class<E>) target;
             final StringBuilder builder = new StringBuilder();
-            builder.append(" CREATE TABLE ").append(targetClass.getAnnotation(Table.class).name()).append("( ");
+            builder.append(" CREATE TABLE IF NOT EXISTS ").append(targetClass.getAnnotation(Table.class).name()).append("( ");
             for (final Iterator<Field> iterator = EntityUtils.columnFields(targetClass).iterator(); iterator.hasNext();) {
                 final Field field = iterator.next();
                 builder.append(field.getAnnotation(Column.class).name()).append("  ")
