@@ -92,7 +92,7 @@ public final class QueryBuilder {
         for (final Iterator<Criteria> iterator = selection.iterator(); iterator.hasNext();) {
             final Criteria criteria = iterator.next();
             criteria.buildQuery(builder);
-            if (iterator.hasNext()) builder.append(", ");
+            if (iterator.hasNext()) builder.append(" AND ");
         }
         return builder.toString();
     }
