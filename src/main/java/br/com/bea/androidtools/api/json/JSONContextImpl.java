@@ -48,7 +48,15 @@ public class JSONContextImpl<E extends ValueObject> implements JSONContext<E> {
     }
 
     @Override
-    public JSONObject marshal(final E vo) {
+    public JSONArray marshal(final List<E> elements) {
+        final JSONArray array = new JSONArray();
+        for (final E e : elements)
+            array.put(single(e));
+        return array;
+    }
+
+    @Override
+    public JSONObject single(final E vo) {
         final JSONObject object = new JSONObject();
         try {
             for (final MetadataObject mdo : metadata) {

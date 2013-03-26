@@ -17,17 +17,17 @@ CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFT
 IN THE SOFTWARE.
  */
 
-package br.com.bea.androidtools.api.json;
+package br.com.bea.androidtools.api.annotations;
 
-import java.util.List;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import br.com.bea.androidtools.api.model.ValueObject;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public interface JSONContext<E extends ValueObject> {
-    JSONArray marshal(List<E> elements);
-
-    JSONObject single(final E vo);
-
-    List<E> unmarshal(final JSONArray value);
+@Documented
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Date {
+    String pattern();
 }
