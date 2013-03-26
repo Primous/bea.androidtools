@@ -35,8 +35,8 @@ import br.com.bea.androidtools.api.annotations.Metadata;
 
 public final class EntityUtils {
     private static final Map<Integer, List<Field>> columnsCache = new LinkedHashMap<Integer, List<Field>>();
-    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
-    private static final DateFormat DATETIME_FORMAT = new SimpleDateFormat("EEE MMM dd hh:mm:ss zzz yyyy");
+    public static final DateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
+    public static final DateFormat DATETIME_FORMAT = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
     private static final Map<Integer, List<Field>> metadatasCache = new LinkedHashMap<Integer, List<Field>>();
 
     public static final <E extends Entity<?>> List<Field> columnFields(final Class<E> targetClass) {
@@ -70,9 +70,10 @@ public final class EntityUtils {
         if (field.getType().equals(BigDecimal.class))
             return BigDecimal.valueOf(object.getDouble(field.getAnnotation(Metadata.class).value()));
         if (field.getType().equals(Date.class))
-            if (field.isAnnotationPresent(br.com.bea.androidtools.api.annotations.Date.class))
-                return new SimpleDateFormat(field.getAnnotation(br.com.bea.androidtools.api.annotations.Date.class)
-                    .pattern()).parse(object.getString(field.getAnnotation(Metadata.class).value()));
+            if (field.isAnnotationPresent(br.com.bea.androidtools.api.annotations.DateFormat.class))
+                return new SimpleDateFormat(field
+                    .getAnnotation(br.com.bea.androidtools.api.annotations.DateFormat.class).pattern()).parse(object
+                    .getString(field.getAnnotation(Metadata.class).value()));
             else return DATE_FORMAT.parse(object.getString(field.getAnnotation(Metadata.class).value()));
         return object.get(field.getAnnotation(Metadata.class).value());
     }

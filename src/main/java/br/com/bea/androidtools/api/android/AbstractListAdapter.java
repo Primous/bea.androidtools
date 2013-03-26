@@ -70,4 +70,9 @@ public abstract class AbstractListAdapter<E extends ValueObject> extends BaseAda
     public final List<E> getList() {
         return list;
     }
+
+    public final void remove(final E element) {
+        this.list.remove(element);
+        notifyDataSetChanged();
+    }
 }
