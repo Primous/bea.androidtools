@@ -27,6 +27,7 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import org.json.JSONObject;
 import android.database.Cursor;
@@ -35,8 +36,8 @@ import br.com.bea.androidtools.api.annotations.Metadata;
 
 public final class EntityUtils {
     private static final Map<Integer, List<Field>> columnsCache = new LinkedHashMap<Integer, List<Field>>();
-    public static final DateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
-    public static final DateFormat DATETIME_FORMAT = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+    public static final DateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+    public static final DateFormat DATETIME_FORMAT = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
     private static final Map<Integer, List<Field>> metadatasCache = new LinkedHashMap<Integer, List<Field>>();
 
     public static final <E extends Entity<?>> List<Field> columnFields(final Class<E> targetClass) {
