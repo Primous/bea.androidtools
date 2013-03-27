@@ -37,7 +37,7 @@ import br.com.bea.androidtools.api.annotations.Metadata;
 public final class EntityUtils {
     private static final Map<Integer, List<Field>> columnsCache = new LinkedHashMap<Integer, List<Field>>();
     public static final DateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-    public static final DateFormat DATETIME_FORMAT = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
+    public static final DateFormat DATETIME_FORMAT = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.US);
     private static final Map<Integer, List<Field>> metadatasCache = new LinkedHashMap<Integer, List<Field>>();
 
     public static final <E extends Entity<?>> List<Field> columnFields(final Class<E> targetClass) {
@@ -87,5 +87,11 @@ public final class EntityUtils {
             EntityUtils.metadatasCache.put(targetClass.getName().hashCode(), fields);
         }
         return EntityUtils.metadatasCache.get(targetClass.getName().hashCode());
+    }
+
+    public static final <E extends Entity<?>> String valueOf(final Field field, final E e)
+        throws IllegalArgumentException, IllegalAccessException {
+        if (field.getType().equals(Date.class)) return DATETIME_FORMAT.format((Date) field.get(e));
+        return String.valueOf(field.get(e));
     }
 }

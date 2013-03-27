@@ -23,6 +23,7 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -99,6 +100,8 @@ public class EntityManagerImpl implements EntityManager {
     @Override
     public EntityManager init(final Context context, final String database, final Class<?>... targetClasses) {
         EntityManagerImpl.sqlite = new SQlite(context, database, Arrays.asList(targetClasses));
+        EntityManagerImpl.sqlite.getReadableDatabase().setLocale(Locale.US);
+        EntityManagerImpl.sqlite.getWritableDatabase().setLocale(Locale.US);
         return this;
     }
 
@@ -108,7 +111,7 @@ public class EntityManagerImpl implements EntityManager {
             final ContentValues values = new ContentValues();
             for (final Field field : EntityUtils.columnFields(entity.getClass())) {
                 field.setAccessible(true);
-                values.put(field.getAnnotation(Column.class).name(), String.valueOf(field.get(entity)));
+                values.put(field.getAnnotation(Column.class).name(), EntityUtils.valueOf(field, entity));
             }
             EntityManagerImpl.sqlite.getWritableDatabase().insert(entity.getClass().getAnnotation(Table.class).name(),
                                                                   null, values);
@@ -148,7 +151,7 @@ public class EntityManagerImpl implements EntityManager {
             Integer id = 0;
             for (final Field field : EntityUtils.columnFields(entity.getClass())) {
                 field.setAccessible(true);
-                values.put(field.getAnnotation(Column.class).name(), String.valueOf(field.get(entity)));
+                values.put(field.getAnnotation(Column.class).name(), EntityUtils.valueOf(field, entity));
                 if (field.isAnnotationPresent(Id.class)) {
                     idColumn = field.getAnnotation(Column.class).name();
                     id = (Integer) field.get(entity);

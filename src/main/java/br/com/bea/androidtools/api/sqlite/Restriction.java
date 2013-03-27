@@ -21,7 +21,9 @@ package br.com.bea.androidtools.api.sqlite;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import br.com.bea.androidtools.api.model.EntityUtils;
 
 public class Restriction implements Criteria {
 
@@ -130,7 +132,7 @@ public class Restriction implements Criteria {
 
     public Restriction(final String principalProperty, final Object value, final Expression expression) {
         this.principalProperty = principalProperty;
-        this.value = String.valueOf(value);
+        this.value = valueToString(value);
         this.expression = expression;
     }
 
@@ -138,7 +140,7 @@ public class Restriction implements Criteria {
                        final Object value,
                        final Expression expression,
                        final MatchMode matchMode) {
-        this.value = String.valueOf(value);
+        this.value = valueToString(value);
         this.expression = expression;
         this.matchMode = matchMode;
     }
@@ -200,5 +202,10 @@ public class Restriction implements Criteria {
         if (null != rcriterion) values.addAll(rcriterion.getValues());
         if (null != value) values.addAll(Arrays.asList(String.valueOf(value)));
         return values;
+    }
+
+    private String valueToString(final Object value) {
+        if (value instanceof Date) return EntityUtils.DATETIME_FORMAT.format((Date) value);
+        return String.valueOf(value);
     }
 }
