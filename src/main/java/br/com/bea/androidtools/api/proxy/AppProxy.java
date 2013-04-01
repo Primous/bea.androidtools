@@ -28,6 +28,7 @@ import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 import org.json.JSONArray;
@@ -80,12 +81,12 @@ public class AppProxy implements Proxy<JSONArray> {
                 String line = null;
                 while ((line = reader.readLine()) != null)
                     sb.append(line);
+                return Arrays.asList(new JSONArray(sb.toString()));
             }
-            return Arrays.asList(new JSONArray(sb.toString()));
         } catch (final Exception e) {
-            e.printStackTrace();
+            throw new ConnectException(e.getLocalizedMessage());
         }
-        return null;
+        return Collections.emptyList();
     }
 
 }
