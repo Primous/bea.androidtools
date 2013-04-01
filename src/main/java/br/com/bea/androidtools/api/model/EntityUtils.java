@@ -21,13 +21,11 @@ package br.com.bea.androidtools.api.model;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import org.json.JSONObject;
 import android.database.Cursor;
@@ -36,8 +34,6 @@ import br.com.bea.androidtools.api.annotations.Metadata;
 
 public final class EntityUtils {
     private static final Map<Integer, List<Field>> columnsCache = new LinkedHashMap<Integer, List<Field>>();
-    public static final DateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-    public static final DateFormat DATETIME_FORMAT = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.US);
     private static final Map<Integer, List<Field>> metadatasCache = new LinkedHashMap<Integer, List<Field>>();
 
     public static final <E extends Entity<?>> List<Field> columnFields(final Class<E> targetClass) {
@@ -59,8 +55,7 @@ public final class EntityUtils {
             return BigDecimal
                 .valueOf(cursor.getDouble(cursor.getColumnIndex(field.getAnnotation(Column.class).name())));
         if (field.getType().equals(Date.class))
-            return DATETIME_FORMAT.parse(cursor.getString(cursor.getColumnIndex(field.getAnnotation(Column.class)
-                .name())));
+            return new Date(cursor.getLong(cursor.getColumnIndex(field.getAnnotation(Column.class).name())));
         return cursor.getString(cursor.getColumnIndex(field.getAnnotation(Column.class).name()));
     }
 
@@ -75,7 +70,10 @@ public final class EntityUtils {
                 return new SimpleDateFormat(field
                     .getAnnotation(br.com.bea.androidtools.api.annotations.DateFormat.class).pattern()).parse(object
                     .getString(field.getAnnotation(Metadata.class).value()));
-            else return DATE_FORMAT.parse(object.getString(field.getAnnotation(Metadata.class).value()));
+            else {
+                final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                return dateFormat.parse(object.getString(field.getAnnotation(Metadata.class).value()));
+            }
         return object.get(field.getAnnotation(Metadata.class).value());
     }
 
@@ -91,7 +89,7 @@ public final class EntityUtils {
 
     public static final <E extends Entity<?>> String valueOf(final Field field, final E e)
         throws IllegalArgumentException, IllegalAccessException {
-        if (field.getType().equals(Date.class)) return DATETIME_FORMAT.format((Date) field.get(e));
+        if (field.getType().equals(Date.class)) return String.valueOf(((Date) field.get(e)).getTime());
         return String.valueOf(field.get(e));
     }
 }

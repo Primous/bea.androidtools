@@ -83,6 +83,7 @@ public final class QueryBuilder {
             builder.append(iterator.next());
             if (iterator.hasNext()) builder.append(", ");
         }
+        builder.append(" COLLATE UNICODE ");
         return builder.toString();
     }
 

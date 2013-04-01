@@ -29,7 +29,24 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Column {
+    public static enum Type {
+        BLOB("BLOB"),
+        INTEGER("INTEGER"),
+        NUMERIC("NUMERIC"),
+        REAL("REAL"),
+        TEXT("TEXT");
+        private final String name;
+
+        Type(final String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
+
     String name();
 
-    String type();
+    Type type();
 }
