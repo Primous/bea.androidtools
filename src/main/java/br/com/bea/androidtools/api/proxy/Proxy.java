@@ -28,5 +28,7 @@ public interface Proxy<E> {
 
     Proxy<E> connect(final Properties properties);
 
+    boolean isConnected();
+
     List<E> request(final byte[] data) throws ConnectException;
 }

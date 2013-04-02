@@ -64,6 +64,11 @@ public class AppProxy implements Proxy<JSONArray> {
     }
 
     @Override
+    public boolean isConnected() {
+        return null != connection;
+    }
+
+    @Override
     public List<JSONArray> request(final byte[] data) throws ConnectException {
         if (null == connection) throw new ConnectException("Conexão não realizada!");
         try {
