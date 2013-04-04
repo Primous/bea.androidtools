@@ -33,6 +33,9 @@ import br.com.bea.androidtools.api.annotations.Id;
 import br.com.bea.androidtools.api.annotations.Table;
 import br.com.bea.androidtools.api.model.Entity;
 import br.com.bea.androidtools.api.model.EntityUtils;
+import br.com.bea.androidtools.api.storage.EntityManager;
+import br.com.bea.androidtools.api.storage.Query;
+import br.com.bea.androidtools.api.storage.WrongQueryImplementatioException;
 
 public class EntityManagerImpl implements EntityManager {
 
@@ -89,9 +92,8 @@ public class EntityManagerImpl implements EntityManager {
     @Override
     public <E extends Entity<?>> E find(final E entity) {
         try {
-            final List<E> result = search(QueryBuilder.select().from(entity.getClass()).where(Restriction
-                                                                                                  .eq("id", entity
-                                                                                                      .getId())));
+            final List<E> result = search(SQLQuery.select().from(entity.getClass()).where(Restriction.eq("id", entity
+                                                                                              .getId())));
             close();
             return !result.isEmpty() ? result.get(0) : null;
         } catch (final Exception e) {
@@ -127,13 +129,16 @@ public class EntityManagerImpl implements EntityManager {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <E extends Entity<?>> List<E> search(final QueryBuilder query) {
+    public <E extends Entity<?>> List<E> search(final Query query) {
+        if (!(query instanceof SQLQuery))
+            throw new WrongQueryImplementatioException(String.format("Use: %s", SQLQuery.class.getSimpleName()));
+        final SQLQuery queryBuilder = (SQLQuery) query;
         final List<E> result = new LinkedList<E>();
-        final Cursor cursor = query.build(EntityManagerImpl.sqlite.getReadableDatabase());
+        final Cursor cursor = queryBuilder.build(EntityManagerImpl.sqlite.getReadableDatabase());
         if (cursor.moveToFirst()) do
             try {
-                final E value = (E) query.getTargetClass().newInstance();
-                for (final Field field : EntityUtils.columnFields((Class<E>) query.getTargetClass())) {
+                final E value = (E) queryBuilder.getTargetClass().newInstance();
+                for (final Field field : EntityUtils.columnFields((Class<E>) queryBuilder.getTargetClass())) {
                     field.setAccessible(true);
                     field.set(value, EntityUtils.convert(field, cursor));
                 }

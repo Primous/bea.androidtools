@@ -31,11 +31,12 @@ import br.com.bea.androidtools.api.annotations.Column;
 import br.com.bea.androidtools.api.annotations.Table;
 import br.com.bea.androidtools.api.model.Entity;
 import br.com.bea.androidtools.api.model.EntityUtils;
+import br.com.bea.androidtools.api.storage.Query;
 
-public final class QueryBuilder {
+public final class SQLQuery implements Query {
 
-    public static synchronized QueryBuilder select() {
-        return new QueryBuilder();
+    public static synchronized SQLQuery select() {
+        return new SQLQuery();
     }
 
     private final List<String> groupBy = new LinkedList<String>();
@@ -44,7 +45,7 @@ public final class QueryBuilder {
     private final List<Criteria> selection = new LinkedList<Criteria>();
     private Class<?> targetClass;
 
-    private QueryBuilder() {
+    private SQLQuery() {
     }
 
     Cursor build(final SQLiteDatabase sqlite) {
@@ -98,28 +99,29 @@ public final class QueryBuilder {
         return builder.toString();
     }
 
-    public <E extends Entity<?>> QueryBuilder from(final Class<E> targetClass) {
+    public <E extends Entity<?>> SQLQuery from(final Class<E> targetClass) {
         this.targetClass = targetClass;
         return this;
     }
 
+    @Override
     public Class<?> getTargetClass() {
         return targetClass;
     }
 
-    public QueryBuilder groupBy(final String property, final String... properties) {
+    public SQLQuery groupBy(final String property, final String... properties) {
         groupBy.add(property);
         groupBy.addAll(Arrays.asList(properties));
         return this;
     }
 
-    public QueryBuilder limit(final Long firstResult, final Long maxResult) {
+    public SQLQuery limit(final Long firstResult, final Long maxResult) {
         limit.setFirstResult(firstResult);
         limit.setMaxResult(maxResult);
         return this;
     }
 
-    public QueryBuilder orderBy(final String property, final String... properties) {
+    public SQLQuery orderBy(final String property, final String... properties) {
         orderBy.add(property);
         orderBy.addAll(Arrays.asList(properties));
         return this;
@@ -141,13 +143,13 @@ public final class QueryBuilder {
             .append("\n").append(buildOrderBy()).append("\n").append(buildLimit()).toString();
     }
 
-    public QueryBuilder where(final Criteria... criteria) {
+    public SQLQuery where(final Criteria... criteria) {
         selection.clear();
         selection.addAll(Arrays.asList(criteria));
         return this;
     }
 
-    public QueryBuilder where(final List<Criteria> criteria) {
+    public SQLQuery where(final List<Criteria> criteria) {
         selection.clear();
         selection.addAll(criteria);
         return this;

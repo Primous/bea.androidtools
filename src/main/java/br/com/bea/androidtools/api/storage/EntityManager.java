@@ -17,7 +17,7 @@ CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFT
 IN THE SOFTWARE.
  */
 
-package br.com.bea.androidtools.api.sqlite;
+package br.com.bea.androidtools.api.storage;
 
 import java.util.List;
 import android.content.Context;
@@ -37,7 +37,7 @@ public interface EntityManager {
 
     <E extends Entity<?>> E persist(E entity);
 
-    <E extends Entity<?>> List<E> search(final QueryBuilder query);
+    <E extends Entity<?>> List<E> search(final Query query);
 
     <E extends Entity<?>> E update(E entity);
 
