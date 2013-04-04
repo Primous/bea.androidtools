@@ -35,6 +35,7 @@ public class PreferenceManagerImpl implements EntityManager {
         final List<E> list = search(PreferenceQuery.select().from(entity.getClass()));
         final E e = find(entity);
         list.remove(e);
+        persistAll(entity.getClass(), list);
     }
 
     @Override
@@ -97,11 +98,8 @@ public class PreferenceManagerImpl implements EntityManager {
 
     @Override
     public <E extends Entity<?>> E update(final E entity) {
-        final List<E> list = search(PreferenceQuery.select().from(entity.getClass()));
-        final E e = find(entity);
-        list.remove(e);
-        list.add(entity);
-        persistAll(entity.getClass(), list);
+        delete(entity);
+        persist(entity);
         return entity;
     }
 
