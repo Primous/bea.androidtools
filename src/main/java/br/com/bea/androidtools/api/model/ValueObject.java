@@ -28,6 +28,9 @@ public abstract class ValueObject implements Parcelable, Serializable {
     private static final long serialVersionUID = 1L;
     private final Date version = new Date();
 
+    public ValueObject() {
+    }
+
     @Override
     public int describeContents() {
         return hashCode();

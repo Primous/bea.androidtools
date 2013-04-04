@@ -79,9 +79,9 @@ public class JSONContextImpl<E extends ValueObject> implements JSONContext<E> {
                 final JSONObject object = (JSONObject) value.get(i);
                 final E vo = targetClass.newInstance();
                 for (final MetadataObject mdo : metadata) {
-                    final Field field = targetClass.getDeclaredField(mdo.getField().getName());
+                    final Field field = mdo.getField();
                     field.setAccessible(true);
-                    field.set(vo, object.isNull(mdo.getValue()) ? null : EntityUtils.convert(mdo.getField(), object));
+                    field.set(vo, object.isNull(mdo.getValue()) ? null : EntityUtils.convert(field, object));
                 }
                 result.add(vo);
             }

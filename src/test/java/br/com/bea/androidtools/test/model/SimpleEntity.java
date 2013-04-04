@@ -14,6 +14,10 @@ import br.com.bea.androidtools.api.model.Entity;
 public class SimpleEntity extends Entity<Long> {
 
     private static final long serialVersionUID = 1L;
+    @Metadata("alone")
+    @Column(name = "ALONE", type = Type.INTEGER)
+    private boolean alone;
+
     @Metadata("data")
     @Column(name = "DATA", type = Type.BLOB)
     private byte[] data;
@@ -76,6 +80,14 @@ public class SimpleEntity extends Entity<Long> {
         int result = 1;
         result = prime * result + (id == null ? 0 : id.hashCode());
         return result;
+    }
+
+    public boolean isAlone() {
+        return alone;
+    }
+
+    public void setAlone(final boolean alone) {
+        this.alone = alone;
     }
 
     public void setData(final byte[] data) {

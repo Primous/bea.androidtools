@@ -15,7 +15,8 @@ import br.com.bea.androidtools.test.model.SimpleEntity;
 
 public class JSONContextTest {
 
-    private static final byte[] DATA = new byte[] { 0x00 };
+    private static final boolean ALONE = false;
+    private static final byte[] DATA = { 0x00 };
     private static final long ID = 1L;
     private static final String NAME = "mock";
     private static final BigDecimal PRICE = new BigDecimal("0.00");
@@ -39,6 +40,7 @@ public class JSONContextTest {
         mockObject.put("price", PRICE);
         mockObject.put("version", VERSION);
         mockObject.put("data", DATA);
+        mockObject.put("alone", ALONE);
         mockArray.put(mockObject);
         mockWrongObject.put("id", ID);
         mockWrongObject.put("name", "test");

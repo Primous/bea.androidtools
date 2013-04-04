@@ -63,6 +63,8 @@ public final class EntityUtils {
         if (field.getType().equals(String.class)) return object.getString(field.getAnnotation(Metadata.class).value());
         if (field.getType().equals(Integer.class)) return object.getInt(field.getAnnotation(Metadata.class).value());
         if (field.getType().equals(Long.class)) return object.getLong(field.getAnnotation(Metadata.class).value());
+        if (field.getType().equals(boolean.class))
+            return object.getBoolean(field.getAnnotation(Metadata.class).value());
         if (field.getType().equals(BigDecimal.class))
             return BigDecimal.valueOf(object.getDouble(field.getAnnotation(Metadata.class).value()));
         if (field.getType().equals(Date.class))
