@@ -17,7 +17,7 @@ CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFT
 IN THE SOFTWARE.
  */
 
-package br.com.bea.androidtools.api.sqlite;
+package br.com.bea.androidtools.api.storage.sqlite;
 
 import java.lang.reflect.Field;
 import java.util.Iterator;
@@ -25,11 +25,12 @@ import java.util.List;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import br.com.bea.androidtools.api.annotations.Column;
-import br.com.bea.androidtools.api.annotations.Id;
-import br.com.bea.androidtools.api.annotations.Table;
 import br.com.bea.androidtools.api.model.Entity;
-import br.com.bea.androidtools.api.model.EntityUtils;
+import br.com.bea.androidtools.api.model.EntityMapper;
+import br.com.bea.androidtools.api.model.FieldMapper;
+import br.com.bea.androidtools.api.model.annotations.Column;
+import br.com.bea.androidtools.api.model.annotations.Id;
+import br.com.bea.androidtools.api.model.annotations.Table;
 
 class SQlite<E extends Entity<?>> extends SQLiteOpenHelper {
 
@@ -48,8 +49,9 @@ class SQlite<E extends Entity<?>> extends SQLiteOpenHelper {
             final StringBuilder builder = new StringBuilder();
             builder.append(" CREATE TABLE IF NOT EXISTS ").append(targetClass.getAnnotation(Table.class).name())
                 .append("( ");
-            for (final Iterator<Field> iterator = EntityUtils.columnFields(targetClass).iterator(); iterator.hasNext();) {
-                final Field field = iterator.next();
+            for (final Iterator<FieldMapper> iterator = EntityMapper.get(targetClass).getColumnsFields().values()
+                .iterator(); iterator.hasNext();) {
+                final Field field = iterator.next().getField();
                 builder.append(field.getAnnotation(Column.class).name()).append("  ")
                     .append(field.getAnnotation(Column.class).type().getName()).append("  ")
                     .append(field.isAnnotationPresent(Id.class) ? " PRIMARY KEY " : "");

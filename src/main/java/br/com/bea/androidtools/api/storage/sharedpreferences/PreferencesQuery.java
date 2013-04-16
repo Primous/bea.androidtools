@@ -1,14 +1,14 @@
-package br.com.bea.androidtools.api.sharedpreferences;
+package br.com.bea.androidtools.api.storage.sharedpreferences;
 
 import java.util.Arrays;
 import java.util.List;
 import br.com.bea.androidtools.api.model.Entity;
 import br.com.bea.androidtools.api.storage.Query;
 
-public class PreferenceQuery implements Query {
+public class PreferencesQuery implements Query {
 
-    public static synchronized PreferenceQuery select() {
-        return new PreferenceQuery();
+    public static synchronized PreferencesQuery select() {
+        return new PreferencesQuery();
     }
 
     private Object id;
@@ -21,7 +21,7 @@ public class PreferenceQuery implements Query {
         return list;
     }
 
-    public <E extends Entity<?>> PreferenceQuery from(final Class<E> targetClass) {
+    public <E extends Entity<?>> PreferencesQuery from(final Class<E> targetClass) {
         this.targetClass = targetClass;
         return this;
     }
@@ -35,7 +35,7 @@ public class PreferenceQuery implements Query {
         return targetClass;
     }
 
-    public <E extends Entity<?>> PreferenceQuery whereId(final E e) {
+    public <E extends Entity<?>> PreferencesQuery whereId(final E e) {
         id = e.getId();
         return this;
     }

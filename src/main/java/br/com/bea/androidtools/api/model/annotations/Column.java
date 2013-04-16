@@ -17,31 +17,36 @@ CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFT
 IN THE SOFTWARE.
  */
 
-package br.com.bea.androidtools.api.sqlite;
+package br.com.bea.androidtools.api.model.annotations;
 
-public class Limit {
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-    private Long firstResult;
+@Documented
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Column {
+    public static enum Type {
+        BLOB("BLOB"),
+        INTEGER("INTEGER"),
+        NUMERIC("NUMERIC"),
+        REAL("REAL"),
+        TEXT("TEXT");
+        private final String name;
 
-    private Long maxResult;
+        Type(final String name) {
+            this.name = name;
+        }
 
-    public Long getFirstResult() {
-        return firstResult;
+        public String getName() {
+            return name;
+        }
     }
 
-    public Long getMaxResult() {
-        return maxResult;
-    }
+    String name();
 
-    public boolean isEmpty() {
-        return null == firstResult || null == maxResult;
-    }
-
-    public void setFirstResult(final Long firstResult) {
-        this.firstResult = firstResult;
-    }
-
-    public void setMaxResult(final Long maxResult) {
-        this.maxResult = maxResult;
-    }
+    Type type();
 }

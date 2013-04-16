@@ -17,17 +17,30 @@ CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFT
 IN THE SOFTWARE.
  */
 
-package br.com.bea.androidtools.api.annotations;
+package br.com.bea.androidtools.api.storage;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.util.List;
+import android.content.Context;
+import br.com.bea.androidtools.api.model.Entity;
 
-@Documented
-@Target(ElementType.FIELD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Join {
-    Class<?> value();
+public interface StorageManager {
+
+    void close();
+
+    Long count(Query query);
+
+    <E extends Entity<?>> void delete(E entity);
+
+    <E extends Entity<?>> boolean deleteAll(Class<E> targetEntity);
+
+    <E extends Entity<?>> E find(E entity);
+
+    StorageManager init(Context context, String database, Class<?>... targetClasses);
+
+    <E extends Entity<?>> E persist(E entity);
+
+    <E extends Entity<?>> List<E> search(Query query);
+
+    <E extends Entity<?>> E update(E entity);
+
 }

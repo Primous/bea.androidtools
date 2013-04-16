@@ -6,14 +6,14 @@ import org.json.JSONArray;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import br.com.bea.androidtools.api.proxy.AppProxy;
+import br.com.bea.androidtools.api.proxy.HttpProxy;
 import br.com.bea.androidtools.api.proxy.Proxy;
 
 public class AppProxyTest {
 
     private final Properties mockProperties = new Properties();
     private final Properties mockWrongProperties = new Properties();
-    private final Proxy<JSONArray> proxy = new AppProxy();
+    private final Proxy<JSONArray> proxy = new HttpProxy();
 
     @Before
     public void setUp() throws Exception {

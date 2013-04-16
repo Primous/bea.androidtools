@@ -17,7 +17,7 @@ CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFT
 IN THE SOFTWARE.
  */
 
-package br.com.bea.androidtools.api.annotations;
+package br.com.bea.androidtools.api.model.annotations;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -28,25 +28,6 @@ import java.lang.annotation.Target;
 @Documented
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Column {
-    public static enum Type {
-        BLOB("BLOB"),
-        INTEGER("INTEGER"),
-        NUMERIC("NUMERIC"),
-        REAL("REAL"),
-        TEXT("TEXT");
-        private final String name;
-
-        Type(final String name) {
-            this.name = name;
-        }
-
-        public String getName() {
-            return name;
-        }
-    }
-
-    String name();
-
-    Type type();
+public @interface Metadata {
+    String value();
 }

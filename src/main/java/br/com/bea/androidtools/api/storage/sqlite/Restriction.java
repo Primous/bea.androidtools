@@ -17,7 +17,7 @@ CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFT
 IN THE SOFTWARE.
  */
 
-package br.com.bea.androidtools.api.sqlite;
+package br.com.bea.androidtools.api.storage.sqlite;
 
 import java.util.ArrayList;
 import java.util.Arrays;

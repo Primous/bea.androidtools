@@ -17,28 +17,16 @@ CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFT
 IN THE SOFTWARE.
  */
 
-package br.com.bea.androidtools.api.storage;
+package br.com.bea.androidtools.api.model.annotations;
 
-import java.util.List;
-import android.content.Context;
-import br.com.bea.androidtools.api.model.Entity;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public interface EntityManager {
-
-    void close();
-
-    <E extends Entity<?>> void delete(E entity);
-
-    <E extends Entity<?>> boolean deleteAll(Class<E> targetEntity);
-
-    <E extends Entity<?>> E find(E entity);
-
-    EntityManager init(Context context, String database, Class<?>... targetClasses);
-
-    <E extends Entity<?>> E persist(E entity);
-
-    <E extends Entity<?>> List<E> search(final Query query);
-
-    <E extends Entity<?>> E update(E entity);
-
+@Documented
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Transient {
 }

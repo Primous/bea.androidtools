@@ -19,15 +19,55 @@ IN THE SOFTWARE.
 
 package br.com.bea.androidtools.api.json;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map.Entry;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import br.com.bea.androidtools.api.model.EntityMapper;
+import br.com.bea.androidtools.api.model.FieldMapper;
 import br.com.bea.androidtools.api.model.ValueObject;
 
-public interface JSONContext<E extends ValueObject> {
-    JSONArray marshal(List<E> elements);
+public class JSONContext<E extends ValueObject> {
 
-    JSONObject single(final E vo);
+    private final Class<E> targetClass;
 
-    List<E> unmarshal(final JSONArray value);
+    public JSONContext(final Class<E> targetClass) {
+        this.targetClass = targetClass;
+    }
+
+    public JSONArray marshal(final List<E> elements) {
+        final JSONArray array = new JSONArray();
+        for (final E e : elements)
+            array.put(single(e));
+        return array;
+    }
+
+    public JSONObject single(final E vo) {
+        final JSONObject object = new JSONObject();
+        try {
+            for (final Entry<String, FieldMapper> field : EntityMapper.get(targetClass).getMetadataFields().entrySet())
+                field.getValue().convert(object, field.getValue().getField(), field.getValue().getValue(vo));
+        } catch (final Exception e) {
+            e.printStackTrace();
+        }
+        return object;
+    }
+
+    public List<E> unmarshal(final JSONArray value) {
+        final List<E> result = new LinkedList<E>();
+        try {
+            for (int i = 0; i < value.length(); i++) {
+                final JSONObject object = (JSONObject) value.get(i);
+                final E vo = targetClass.newInstance();
+                for (final Entry<String, FieldMapper> field : EntityMapper.get(targetClass).getMetadataFields()
+                    .entrySet())
+                    field.getValue().convert(vo, field.getValue().getField(), object);
+                result.add(vo);
+            }
+        } catch (final Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 }

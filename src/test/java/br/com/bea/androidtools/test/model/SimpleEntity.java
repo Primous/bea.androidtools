@@ -2,13 +2,13 @@ package br.com.bea.androidtools.test.model;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import br.com.bea.androidtools.api.annotations.Column;
-import br.com.bea.androidtools.api.annotations.Column.Type;
-import br.com.bea.androidtools.api.annotations.DateFormat;
-import br.com.bea.androidtools.api.annotations.Id;
-import br.com.bea.androidtools.api.annotations.Metadata;
-import br.com.bea.androidtools.api.annotations.Table;
 import br.com.bea.androidtools.api.model.Entity;
+import br.com.bea.androidtools.api.model.annotations.Column;
+import br.com.bea.androidtools.api.model.annotations.Column.Type;
+import br.com.bea.androidtools.api.model.annotations.DateFormat;
+import br.com.bea.androidtools.api.model.annotations.Id;
+import br.com.bea.androidtools.api.model.annotations.Metadata;
+import br.com.bea.androidtools.api.model.annotations.Table;
 
 @Table(name = "SIMPLE")
 public class SimpleEntity extends Entity<Long> {
@@ -35,7 +35,7 @@ public class SimpleEntity extends Entity<Long> {
     @Column(name = "PRICE", type = Type.REAL)
     private BigDecimal price;
 
-    @DateFormat(pattern = "EEE MMM dd HH:mm:ss ZZZ yyyy")
+    @DateFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Metadata("version")
     @Column(name = "VERSION", type = Type.NUMERIC)
     private Date version;

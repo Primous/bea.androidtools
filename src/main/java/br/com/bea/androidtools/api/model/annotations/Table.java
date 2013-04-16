@@ -17,25 +17,19 @@ CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFT
 IN THE SOFTWARE.
  */
 
-package br.com.bea.androidtools.api.metadata;
+package br.com.bea.androidtools.api.model.annotations;
 
-import java.lang.reflect.Field;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public final class MetadataObject {
-    private final Field field;
-    private final String value;
+@Documented
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Table {
+    String name();
 
-    public MetadataObject(final Field field, final String value) {
-        this.field = field;
-        this.value = value;
-    }
-
-    public Field getField() {
-        return field;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
+    String scheme() default "";
 }

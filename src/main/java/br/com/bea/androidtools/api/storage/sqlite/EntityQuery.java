@@ -17,26 +17,26 @@ CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFT
 IN THE SOFTWARE.
  */
 
-package br.com.bea.androidtools.api.sqlite;
+package br.com.bea.androidtools.api.storage.sqlite;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map.Entry;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import br.com.bea.androidtools.api.annotations.Column;
-import br.com.bea.androidtools.api.annotations.Table;
 import br.com.bea.androidtools.api.model.Entity;
-import br.com.bea.androidtools.api.model.EntityUtils;
+import br.com.bea.androidtools.api.model.EntityMapper;
+import br.com.bea.androidtools.api.model.FieldMapper;
+import br.com.bea.androidtools.api.model.annotations.Table;
 import br.com.bea.androidtools.api.storage.Query;
 
-public final class SQLQuery implements Query {
+public final class EntityQuery implements Query {
 
-    public static synchronized SQLQuery select() {
-        return new SQLQuery();
+    public static synchronized EntityQuery select() {
+        return new EntityQuery();
     }
 
     private final List<String> groupBy = new LinkedList<String>();
@@ -45,7 +45,7 @@ public final class SQLQuery implements Query {
     private final List<Criteria> selection = new LinkedList<Criteria>();
     private Class<?> targetClass;
 
-    private SQLQuery() {
+    private EntityQuery() {
     }
 
     Cursor build(final SQLiteDatabase sqlite) {
@@ -56,8 +56,9 @@ public final class SQLQuery implements Query {
     @SuppressWarnings("unchecked")
     private String[] buildColumns() {
         final List<String> columns = new ArrayList<String>(0);
-        for (final Field field : EntityUtils.columnFields((Class<Entity<?>>) targetClass))
-            if (field.isAnnotationPresent(Column.class)) columns.add(field.getAnnotation(Column.class).name());
+        for (final Entry<String, FieldMapper> entry : EntityMapper.get((Class<Entity<?>>) targetClass)
+            .getColumnsFields().entrySet())
+            columns.add(entry.getKey());
         return columns.toArray(new String[columns.size()]);
     }
 
@@ -99,7 +100,7 @@ public final class SQLQuery implements Query {
         return builder.toString();
     }
 
-    public <E extends Entity<?>> SQLQuery from(final Class<E> targetClass) {
+    public <E extends Entity<?>> EntityQuery from(final Class<E> targetClass) {
         this.targetClass = targetClass;
         return this;
     }
@@ -109,19 +110,19 @@ public final class SQLQuery implements Query {
         return targetClass;
     }
 
-    public SQLQuery groupBy(final String property, final String... properties) {
+    public EntityQuery groupBy(final String property, final String... properties) {
         groupBy.add(property);
         groupBy.addAll(Arrays.asList(properties));
         return this;
     }
 
-    public SQLQuery limit(final Long firstResult, final Long maxResult) {
+    public EntityQuery limit(final Long firstResult, final Long maxResult) {
         limit.setFirstResult(firstResult);
         limit.setMaxResult(maxResult);
         return this;
     }
 
-    public SQLQuery orderBy(final String property, final String... properties) {
+    public EntityQuery orderBy(final String property, final String... properties) {
         orderBy.add(property);
         orderBy.addAll(Arrays.asList(properties));
         return this;
@@ -143,13 +144,13 @@ public final class SQLQuery implements Query {
             .append("\n").append(buildOrderBy()).append("\n").append(buildLimit()).toString();
     }
 
-    public SQLQuery where(final Criteria... criteria) {
+    public EntityQuery where(final Criteria... criteria) {
         selection.clear();
         selection.addAll(Arrays.asList(criteria));
         return this;
     }
 
-    public SQLQuery where(final List<Criteria> criteria) {
+    public EntityQuery where(final List<Criteria> criteria) {
         selection.clear();
         selection.addAll(criteria);
         return this;

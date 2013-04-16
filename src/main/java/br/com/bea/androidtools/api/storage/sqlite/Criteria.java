@@ -17,16 +17,41 @@ CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFT
 IN THE SOFTWARE.
  */
 
-package br.com.bea.androidtools.api.annotations;
+package br.com.bea.androidtools.api.storage.sqlite;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.util.List;
 
-@Documented
-@Target(ElementType.FIELD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Transient {
+public interface Criteria {
+
+    static enum Expression {
+        AND("(%s AND %s)"),
+        BETWEEN("BETWEEN ? AND ?"),
+        EQ(" = "),
+        GE(" >= "),
+        GT(" > "),
+        IN(" IN (%s) "),
+        IS_NOT_NULL(" IS NOT NULL "),
+        IS_NULL(" IS NULL "),
+        LE(" <= "),
+        LIKE(" LIKE "),
+        LT(" < "),
+        NE(" != "),
+        NOT("NOT (%s)"),
+        OR(" (%s OR %s) ");
+
+        private final String value;
+
+        Expression(final String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return value;
+        }
+    }
+
+    StringBuilder buildQuery(final StringBuilder builder);
+
+    List<String> getValues();
 }

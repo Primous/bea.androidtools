@@ -1,6 +1,7 @@
 package br.com.bea.androidtools.test.json;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -10,7 +11,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import br.com.bea.androidtools.api.json.JSONContext;
-import br.com.bea.androidtools.api.json.JSONContextImpl;
 import br.com.bea.androidtools.test.model.SimpleEntity;
 
 public class JSONContextTest {
@@ -22,7 +22,7 @@ public class JSONContextTest {
     private static final BigDecimal PRICE = new BigDecimal("0.00");
     private static final Date VERSION = new Date();
 
-    private final JSONContext<SimpleEntity> context = new JSONContextImpl<SimpleEntity>(SimpleEntity.class);
+    private final JSONContext<SimpleEntity> context = new JSONContext<SimpleEntity>(SimpleEntity.class);
     private final JSONArray mockArray = new JSONArray();
     private final JSONObject mockObject = new JSONObject();
     private final SimpleEntity mockSimpleEntity = new SimpleEntity();
@@ -38,8 +38,8 @@ public class JSONContextTest {
         mockObject.put("id", ID);
         mockObject.put("name", NAME);
         mockObject.put("price", PRICE);
-        mockObject.put("version", VERSION);
-        mockObject.put("data", DATA);
+        mockObject.put("version", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(VERSION));
+        mockObject.put("data", new String(DATA));
         mockObject.put("alone", ALONE);
         mockArray.put(mockObject);
         mockWrongObject.put("id", ID);

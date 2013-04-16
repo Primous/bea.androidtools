@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Properties;
 import org.json.JSONArray;
 
-public class AppProxy implements Proxy<JSONArray> {
+public class HttpProxy implements Proxy<JSONArray> {
 
     private HttpURLConnection connection;
     private InputStream input;
