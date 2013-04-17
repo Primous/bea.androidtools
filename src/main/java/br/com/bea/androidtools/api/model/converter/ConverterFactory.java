@@ -7,9 +7,11 @@ public final class ConverterFactory {
 
     public static final synchronized Converter get(final Class<?> target) {
         if (target.equals(String.class)) return StringConverter.getInstance();
+        if (target.equals(long.class) || target.equals(Long.class)) return LongConverter.getInstance();
+        if (target.equals(double.class) || target.equals(Double.class)) return DoubleConverter.getInstance();
+        if (target.equals(int.class) || target.equals(Integer.class)) return IntegerConverter.getInstance();
         if (target.equals(BigDecimal.class)) return BigDecimalConverter.getInstance();
         if (target.equals(Date.class)) return DateConverter.getInstance();
-        if (target.equals(Long.class)) return LongConverter.getInstance();
         if (target.equals(byte[].class)) return ByteArrayConverter.getInstance();
         if (target.equals(boolean.class)) return BooleanConverter.getInstance();
         if (target.equals(char.class)) return CharConverter.getInstance();
