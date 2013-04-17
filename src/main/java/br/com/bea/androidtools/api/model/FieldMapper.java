@@ -38,6 +38,7 @@ public final class FieldMapper {
     }
 
     public Field getField() {
+        field.setAccessible(true);
         return field;
     }
 
