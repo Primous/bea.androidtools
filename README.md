@@ -36,6 +36,8 @@ You also can add as a module in your parent pom:
 </modules>
 ```
 
+Or put the bea.androidtools-0.0.2.jar on libs path from your ADT generated android project.
+
 
 ## Model
 **JSON and ORM Mapping**
