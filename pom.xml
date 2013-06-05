@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>br.com.bea</groupId>
     <artifactId>bea.androidtools</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
     <name>B&amp;A Tecnologia and Collaborators - Android Tools</name>
     <properties>
         <platform.version>17</platform.version>
