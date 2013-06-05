@@ -22,8 +22,7 @@ Add br.com.bea.androidtools as Maven dependency:
     <dependency>
         <groupId>br.com.bea.androidtools</groupId>
         <artifactId>br.com.bea.androidtools</artifactId>
-        <version>0.0.1</version>
-        <type>apklib</type>
+        <version>0.0.2</version>
     </dependency>
 ...
 </dependencies>
@@ -42,6 +41,7 @@ You also can add as a module in your parent pom:
 **JSON and ORM Mapping**
 ```java
 @Table(name="TB_EXAMPLE")
+@Metadata("example")
 public final class ExampleEntity extends Entity<Integer> {
 
     @Metadata("id") // for JSON
@@ -72,6 +72,17 @@ EntityManagerImpl.getInstance().<ExampleEntity>search( ... );
 ...
 
 ```
+## SharedPreferences Access
+**Persisting informations on SharedPreferences.**
+```java
+...
+
+//soon...
+
+...
+
+```
+
 ## QueryBuilder
 **Easy and intuitive way to build your query.**
 ```java
