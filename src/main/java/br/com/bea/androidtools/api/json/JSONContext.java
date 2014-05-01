@@ -46,8 +46,8 @@ public class JSONContext<E extends ValueObject> {
     public JSONObject single(final E vo) {
         final JSONObject object = new JSONObject();
         try {
-            for (final Entry<String, FieldMapper> field : EntityMapper.get(targetClass).getMetadataFields().entrySet())
-                field.getValue().convert(object, field.getValue().getField(), field.getValue().getValue(vo));
+            for (final Entry<String, FieldMapper> entry : EntityMapper.get(targetClass).getMetadataFields().entrySet())
+                entry.getValue().convert(object, entry.getValue().getField(), entry.getValue().getValue(vo));
         } catch (final Exception e) {
             e.printStackTrace();
         }
@@ -60,9 +60,9 @@ public class JSONContext<E extends ValueObject> {
             for (int i = 0; i < value.length(); i++) {
                 final JSONObject object = (JSONObject) value.get(i);
                 final E vo = targetClass.newInstance();
-                for (final Entry<String, FieldMapper> field : EntityMapper.get(targetClass).getMetadataFields()
+                for (final Entry<String, FieldMapper> entry : EntityMapper.get(targetClass).getMetadataFields()
                     .entrySet())
-                    field.getValue().convert(vo, field.getValue().getField(), object);
+                    entry.getValue().convert(vo, entry.getValue().getField(), object);
                 result.add(vo);
             }
         } catch (final Exception e) {

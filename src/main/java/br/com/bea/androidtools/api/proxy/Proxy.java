@@ -19,16 +19,25 @@ IN THE SOFTWARE.
 
 package br.com.bea.androidtools.api.proxy;
 
-import java.net.ConnectException;
+import java.net.URL;
 import java.util.List;
-import java.util.Properties;
+import android.os.Handler;
+import br.com.bea.androidtools.api.model.ValueObject;
 
-public interface Proxy<E> {
-    void close();
+public interface Proxy<E extends ValueObject> {
+    public static final String RESPONSE = "br.com.bea.androidtools.api.proxy.RESPONSE";
 
-    Proxy<E> connect(final Properties properties);
+    Proxy<E> addHandler(Handler handler);
 
-    boolean isConnected();
+    Proxy<E> addParameter(final String key, final String value);
 
-    List<E> request(final byte[] data) throws ConnectException;
+    Proxy<E> authenticateWith(final String user, final String password);
+
+    Proxy<E> connectTo(final URL url);
+
+    List<E> doGet();
+
+    List<E> doPost();
+
+    Proxy<E> encoding(final String encoding);
 }

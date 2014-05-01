@@ -1,43 +1,22 @@
 package br.com.bea.androidtools.test.proxy;
 
 import java.net.ConnectException;
-import java.util.Properties;
-import org.json.JSONArray;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import java.net.MalformedURLException;
+import java.net.URL;
 import br.com.bea.androidtools.api.proxy.HttpProxy;
 import br.com.bea.androidtools.api.proxy.Proxy;
+import br.com.bea.androidtools.test.model.SimpleEntity;
 
 public class AppProxyTest {
 
-    private final Properties mockProperties = new Properties();
-    private final Properties mockWrongProperties = new Properties();
-    private final Proxy<JSONArray> proxy = new HttpProxy();
+    private final Proxy<SimpleEntity> proxy = new HttpProxy<SimpleEntity>(SimpleEntity.class);
 
-    @Before
-    public void setUp() throws Exception {
-        mockProperties.setProperty("url_connection", "http://brunojensen.github.com/json/array.json");
-        mockProperties.setProperty("method", "GET");
-        mockWrongProperties.setProperty("url_connection", "http://www.google.com.br/");
+    public void testGet() throws ConnectException, MalformedURLException {
+        proxy.connectTo(new URL("http://brunojensen.github.com/json/array.json")).encoding("ISO-8859-1").doGet();
     }
 
-    @Test
-    public void testConnection() {
-        proxy.connect(mockProperties);
-        Assert.assertTrue(proxy.isConnected());
-    }
-
-    @Test
-    public void testRequest() throws ConnectException {
-        testConnection();
-        proxy.request(null);
-    }
-
-    @Test
-    public void testWrongConnection() {
-        proxy.connect(mockWrongProperties);
-        Assert.assertFalse(proxy.isConnected());
+    public void testPost() throws ConnectException, MalformedURLException {
+        proxy.connectTo(new URL("http://brunojensen.github.com/json/array.json")).encoding("ISO-8859-1").doPost();
     }
 
 }
