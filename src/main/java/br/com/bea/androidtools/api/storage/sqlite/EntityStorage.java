@@ -2,18 +2,18 @@
 The MIT License (MIT)
 Copyright (c) 2013 B&A Tecnologia and Collaborators
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 documentation files (the "Software"), to deal in the Software without restriction, including without limitation
 the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and
 to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions 
+The above copyright notice and this permission notice shall be included in all copies or substantial portions
 of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED 
-TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
-THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
-CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 IN THE SOFTWARE.
  */
 
@@ -42,12 +42,12 @@ import br.com.bea.androidtools.api.storage.WrongQueryImplementatioException;
 public class EntityStorage implements StorageManager {
 
     private static final StorageManager INSTANCE = new EntityStorage();
-    @SuppressWarnings("rawtypes")
-    private static ThreadLocal<SQlite> sqlite;
 
     public static synchronized StorageManager getInstance() {
         return EntityStorage.INSTANCE;
     }
+
+    private SQlite<Entity<?>> sqlite;
 
     private EntityStorage() {
     }
@@ -82,7 +82,7 @@ public class EntityStorage implements StorageManager {
                     break;
                 }
             }
-            if (id == 0) throw new SQLiteException("Entidade não possui Id");
+            if (id == 0) throw new SQLiteException("Entidade nï¿½o possui Id");
             getSqlite().getWritableDatabase()
                 .delete(entity.getClass().getAnnotation(Table.class).name(), String.format("%s = ? ", idColumn),
                         new String[] { id.toString() });
@@ -117,20 +117,13 @@ public class EntityStorage implements StorageManager {
         }
     }
 
-    @SuppressWarnings("rawtypes")
-    private SQlite getSqlite() {
-        return EntityStorage.sqlite.get();
+    private synchronized SQlite<Entity<?>> getSqlite() {
+        return sqlite;
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public StorageManager init(final Context context, final String database, final Class<?>... targetClasses) {
-        if (null == EntityStorage.sqlite) EntityStorage.sqlite = new ThreadLocal<SQlite>() {
-            @Override
-            protected SQlite initialValue() {
-                return new SQlite(context, database, Arrays.asList(targetClasses));
-            }
-        };
+        if (null == getSqlite()) setSqlite(new SQlite<Entity<?>>(context, database, Arrays.asList(targetClasses)));
         getSqlite().getReadableDatabase().setLocale(Locale.US);
         getSqlite().getWritableDatabase().setLocale(Locale.US);
         return this;
@@ -178,6 +171,10 @@ public class EntityStorage implements StorageManager {
         return result;
     }
 
+    private synchronized void setSqlite(final SQlite<Entity<?>> sqlite) {
+        this.sqlite = sqlite;
+    }
+
     @Override
     public <E extends Entity<?>> E update(final E entity) {
         try {
@@ -192,7 +189,7 @@ public class EntityStorage implements StorageManager {
                     id = ((Number) entry.getValue().getValue(entity)).intValue();
                 }
             }
-            if (id == 0) throw new SQLiteException("Entidade não possui Id");
+            if (id == 0) throw new SQLiteException("Entidade nï¿½o possui Id");
             getSqlite().getWritableDatabase()
                 .update(entity.getClass().getAnnotation(Table.class).name(), values,
                         String.format("%s = ? ", idColumn), new String[] { id.toString() });
