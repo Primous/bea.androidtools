@@ -1,3 +1,15 @@
+env:
+  global:
+   - secure: "FmxuRiy1JnO2wBdU2h4j6XzEg+kS5j9m8b7DuFdCPWkFQT41PYmSnuMTGQHlPnXra/USD2QK8kv7FE1+Rfn59CoHVTUEXVjKxe8mz3le/TwYS9FMZx+uAqCoSd0mExp4sZ+Amr8FDISgViDtEKIBS+QPTcDRF/x6fvodyF3WJxs="
+addons:
+  coverity_scan:
+    project:
+      name: "brunojensen/bea.androidtools"
+      description: "Build submitted via Travis CI"
+    notification_email: ordead6@gmail.com
+    build_command_prepend: "mvn clean"
+    build_command:   "mvn -DskipTests=true compile"
+    branch_pattern: coverity_scan
 language: java
 jdk:
   - openjdk6
