@@ -1,5 +1,12 @@
 Android Tools
+
+
+
 =============
+<a href="https://scan.coverity.com/projects/3188">
+  <img alt="Coverity Scan Build Status"
+       src="https://scan.coverity.com/projects/3188/badge.svg"/>
+</a>
 
 [![Build Status](https://travis-ci.org/brunojensen/bea.androidtools.png?branch=master)](https://travis-ci.org/brunojensen/bea.androidtools)
 
