@@ -13,10 +13,14 @@ Android Tools
 **Project designed to accelerate the development of android apps.**
 
 <p>
-Author: Bruno Jensen (https://github.com/brunojensen)
+Author: <br/>
+Bruno Jensen (https://github.com/brunojensen)
 </p>
 <p>
-Collaborators: Diego Nunes (https://github.com/odiego), Rafael Garbin (https://github.com/rgarbin)
+Collaborators: <br/>
+Diego Nunes (https://github.com/odiego) <br/>
+Rafael Garbin (https://github.com/rgarbin) <br/>
+Cristian Oliveira da Rosa (https://github.com/CristianOliveiraDaRosa) <br/>
 </p>
 ## How to use in my android project?
 
