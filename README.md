@@ -1,7 +1,4 @@
 Android Tools
-
-
-
 =============
 <a href="https://scan.coverity.com/projects/3188">
   <img alt="Coverity Scan Build Status"
@@ -22,10 +19,26 @@ Diego Nunes (https://github.com/odiego) <br/>
 Rafael Garbin (https://github.com/rgarbin) <br/>
 Cristian Oliveira da Rosa (https://github.com/CristianOliveiraDaRosa) <br/>
 </p>
+
+## Build and Test with Gradle
+
+To build Android Tools with gradle do:
+
+```
+   git clone https://github.com/brunojensen/bea.androidtools.git
+
+   cd bea.androidtools
+
+   gradle clean build test
+```
+
+Reports of JUnit test is going be generate into "build/reports/tests"
+
 ## How to use in my android project?
 
-Add br.com.bea.androidtools as Maven dependency:
+Add br.com.bea.androidtools as dependency:
 
+###Maven
 ```xml
 ...
 <dependencies>
@@ -39,6 +52,18 @@ Add br.com.bea.androidtools as Maven dependency:
 </dependencies>
 ...
 ```
+###Gradle
+```
+repositories {
+     mavenCentral()
+}
+
+dependencies {
+     compile 'br.com.bea.androidtools:0.0.2'
+}
+
+```
+
 You also can add as a module in your parent pom:
 
 ```xml
@@ -112,13 +137,13 @@ QueryBuilder.select()
 ```java
 public final class ExampleService extends Service<ExampleEntity> {
     private static final Service<ExampleEntity> INSTANCE = new ExampleService();
-    
+
     private ExampleService() {}
-    
+
     public Service<ExampleEntity> getInstance() {
         return INSTANCE;
     }
-    
+
     /**
     * Using JSONContext and Proxy
     */
@@ -139,19 +164,19 @@ public final class ExampleService extends Service<ExampleEntity> {
             final JSONContext<ExampleEntity> jsonContext = new JSONContextImpl<ExampleEntity>(ExampleEntity.class);
             // Send a request to the appProxy which return a List of JSONArray
             for (JSONArray array : appProxy.request(null))
-                result.addAll(jsonContext.unmarshal(array)); // Unmarshal each JSONArray into a Collection 
+                result.addAll(jsonContext.unmarshal(array)); // Unmarshal each JSONArray into a Collection
                                                              // of ExampleEntity
         } catch (java.net.ConnectException e) {
             throw new ServiceException(e);
         } finally {
             appProxy.close();
         }
-        return result;    
+        return result;
     }
-    
+
     @Override
     public ExampleEntity find(final ExampleEntity entity) { ... }
-    
+
     ...
 }
 ```
@@ -168,7 +193,7 @@ public final class ExampleListAdapter extends AbstractListAdapter<ExampleEntity>
     class ViewHolder {
         TextView label;
     }
-    
+
     @Override
     public View getView(final int position, final View convertView, final ViewGroup parent) {
         RelativeLayout layout = (RelativeLayout) convertView;
@@ -195,7 +220,7 @@ public class ExampleActivity extends ListActivity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final ExampleListAdapter listAdapter = 
+        final ExampleListAdapter listAdapter =
                         new ExampleListAdapter((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE));
         new AbstractAsyncTask<EventEntity>(EventService.getInstance()) {
             @Override
@@ -214,4 +239,3 @@ This project is released under the [MIT License](http://www.opensource.org/licen
 ## Contributing
 
 Please fork this repository and contribute back using pull requests.
-
