@@ -21,9 +21,11 @@ package br.com.bea.androidtools.api.storage.sqlite;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -34,7 +36,9 @@ import br.com.bea.androidtools.api.model.annotations.Table;
 import br.com.bea.androidtools.api.storage.Query;
 
 public final class EntityQuery implements Query {
-
+    
+    final String SQL_STATEMENT = "SELECT ? FROM ? WHERE ? ? ? ?";
+    
     public static synchronized EntityQuery select() {
         return new EntityQuery();
     }
@@ -44,14 +48,24 @@ public final class EntityQuery implements Query {
     private final List<String> orderBy = new LinkedList<String>();
     private final List<Criteria> selection = new LinkedList<Criteria>();
     private Class<?> targetClass;
+    
+    private Map<Class<?>, String> joinTargetClassess;
 
     private EntityQuery() {
     }
 
     Cursor build(final SQLiteDatabase sqlite) {
+        
+        if(joinTargetClassess != null)
+        {
+            String sqlStatement = buildRawSql();
+            return sqlite.rawQuery(sqlStatement, null);
+        }
+        else
         return sqlite.query(targetClass.getAnnotation(Table.class).name(), buildColumns(), buildSelection(),
                             selectionValues(), buildGroupBy(), null, buildOrderBy(), buildLimit());
     }
+    
 
     @SuppressWarnings("unchecked")
     private String[] buildColumns() {
@@ -98,6 +112,39 @@ public final class EntityQuery implements Query {
             if (iterator.hasNext()) builder.append(" AND ");
         }
         return builder.toString();
+    }
+    
+    public String buildRawSql()
+    {
+        StringBuilder joins = new StringBuilder();
+        Iterator<Entry<Class<?>, String>> it = joinTargetClassess.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry map = (Entry)it.next();
+            joins.append(String.format("? ON (?)"
+                                      , ((Class<?>) map.getKey()).getAnnotation(Table.class).name()
+                                      , map.getValue()
+                                      ));
+            it.remove(); // avoids a ConcurrentModificationException
+        }
+        
+        String where = "";
+        
+        
+        
+        String sqlForFormat = String.format( SQL_STATEMENT
+                                            , buildColumns()
+                                            , joins.toString()
+                                            , buildSelection()
+                                            , buildGroupBy()
+                                            , buildOrderBy()
+                                            , buildLimit() 
+                                            );
+        
+        for (String val : selectionValues()) {
+            sqlForFormat =  String.format(sqlForFormat, val);  
+        }
+        
+        return sqlForFormat;
     }
 
     public <E extends Entity<?>> EntityQuery from(final Class<E> targetClass) {
@@ -153,6 +200,16 @@ public final class EntityQuery implements Query {
     public EntityQuery where(final List<Criteria> criteria) {
         selection.clear();
         selection.addAll(criteria);
+        return this;
+    }
+    
+    public <E extends Entity<?>> EntityQuery join(final Class<E> targetClass, String where)
+    {
+        if(joinTargetClassess == null)
+            joinTargetClassess = new HashMap<Class<?>, String>();
+        
+        joinTargetClassess.put(targetClass, where);
+        
         return this;
     }
 }
